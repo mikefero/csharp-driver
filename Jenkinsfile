@@ -1,6 +1,19 @@
 #!groovy
 
 def initializeEnvironment() {
+  env.DRIVER_DISPLAY_NAME = 'Cassandra C# Driver'
+  if (env.GIT_URL.contains('riptano/csharp-driver')) {
+    env.DRIVER_DISPLAY_NAME = 'private ' + env.DRIVER_DISPLAY_NAME
+  } else if (env.GIT_URL.contains('csharp-dse-driver')) {
+    env.DRIVER_DISPLAY_NAME = 'DSE C# Driver'
+  }
+
+  env.GIT_SHA = "${env.GIT_COMMIT.take(7)}"
+  env.GITHUB_PROJECT_URL = "https://${GIT_URL.replaceFirst(/(git@|http:\/\/|https:\/\/)/, '').replace(':', '/').replace('.git', '')}"
+  env.GITHUB_BRANCH_URL = "${GITHUB_PROJECT_URL}/tree/${env.BRANCH_NAME}"
+  env.GITHUB_COMMIT_URL = "${GITHUB_PROJECT_URL}/commit/${env.GIT_COMMIT}"
+  env.BLUE_OCEAN_URL = "${env.BUILD_URL.replaceFirst('job', 'blue/organizations/jenkins').replaceFirst('job', 'detail')}"
+
   if (env.OS_VERSION.split('/')[0] == 'win') {
     ;; // Handle Windows initialization
   } else {
@@ -147,6 +160,39 @@ def executeTests() {
       '''
     } 
   }
+}
+
+def notifySlack(status = 'started') {
+  // Set the global pipeline scoped environment (this is above each matrix)
+  env.BUILD_STATED_SLACK_NOTIFIED = 'true'
+
+  def buildType = 'Commit'
+  if (params.CI_SCHEDULE != 'DO-NOT-CHANGE-THIS-SELECTION') {
+    buildType = "${params.CI_SCHEDULE.toLowerCase().capitalize()}"
+  }
+
+  def color = 'good' // Green
+  if (status.equalsIgnoreCase('aborted')) {
+    color = '808080' // Grey
+  } else if (status.equalsIgnoreCase('unstable')) {
+    color = 'warning' // Orange
+  } else if (status.equalsIgnoreCase('failed')) {
+    color = 'danger' // Red
+  }
+
+  def message = """Build ${status} for ${env.DRIVER_DISPLAY_NAME} [${buildType}]
+<${env.GITHUB_BRANCH_URL}|${env.BRANCH_NAME}> - <${env.BLUE_OCEAN_URL}|#${env.BUILD_NUMBER}> - <${env.GITHUB_COMMIT_URL}|${env.GIT_SHA}>"""
+  if (params.CI_SCHEDULE != 'DO-NOT-CHANGE-THIS-SELECTION') {
+    message += " - ${params.CI_SCHEDULE_DOTNET_VERSION} - ${env.OS_VERSION}"
+  }
+  if (!status.equalsIgnoreCase('Started')) {
+    message += """
+${status} after ${currentBuild.durationString - ' and counting'}"""
+  }
+
+  slackSend color: "${color}",
+            channel: "#csharp-driver-dev-bots",
+            message: "${message}"
 }
 
 def describePerCommitStage() {
@@ -440,14 +486,19 @@ pipeline {
         }
 
         stages {
-          stage('Describe-Build') {
-            steps {
-              describePerCommitStage()
-            }
-          }
           stage('Initialize-Environment') {
             steps {
               initializeEnvironment()
+              script {
+                if (env.BUILD_STATED_SLACK_NOTIFIED != 'true') {
+                  notifySlack()
+                }
+              }
+            }
+          }
+          stage('Describe-Build') {
+            steps {
+              describePerCommitStage()
             }
           }
           stage('Install-Dependencies') {
@@ -470,6 +521,20 @@ pipeline {
               }
             }
           }
+        }
+      }
+      post {
+        aborted {
+          notifySlack('aborted')
+        }
+        success {
+          notifySlack('completed')
+        }
+        unstable {
+          notifySlack('unstable')
+        }
+        failure {
+          notifySlack('FAILED')
         }
       }
     }
@@ -517,14 +582,19 @@ pipeline {
         }
 
         stages {
-          stage('Describe-Build') {
-            steps {
-              describeScheduledTestingStage()
-            }
-          }
           stage('Initialize-Environment') {
             steps {
               initializeEnvironment()
+              script {
+                if (env.BUILD_STATED_SLACK_NOTIFIED != 'true') {
+                  notifySlack()
+                }
+              }
+            }
+          }
+          stage('Describe-Build') {
+            steps {
+              describeScheduledTestingStage()
             }
           }
           stage('Install-Dependencies') {
@@ -547,6 +617,20 @@ pipeline {
               }
             }
           }
+        }
+      }
+      post {
+        aborted {
+          notifySlack('aborted')
+        }
+        success {
+          notifySlack('completed')
+        }
+        unstable {
+          notifySlack('unstable')
+        }
+        failure {
+          notifySlack('FAILED')
         }
       }
     }
