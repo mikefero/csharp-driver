@@ -416,9 +416,9 @@ pipeline {
       #   - Target Apache Cassandara® v2.2.x, v3.11.x and DataStax Enterprise v5.1.x, v6.7.x for mono and netcoreapp2.0
       #   - Target all Apache Cassandara® and DataStax Enterprise versions for netcoreapp2.1
       ##
-      H 0 * * 1-5 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=mono;CI_SCHEDULE_SERVER_VERSION='2.2 3.11 dse-5.1 dse-6.7';CI_SCHEDULE_OS_VERSION='ubuntu/bionic64/csharp-driver'
-      H 0 * * 1-5 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=netcoreapp2.0;CI_SCHEDULE_SERVER_VERSION='2.2 3.11 dse-5.1 dse-6.7';CI_SCHEDULE_OS_VERSION='ubuntu/bionic64/csharp-driver'
-      H 1 * * 1-5 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=netcoreapp2.1;CI_SCHEDULE_SERVER_VERSION=ALL;CI_SCHEDULE_OS_VERSION='ubuntu/bionic64/csharp-driver'
+      H 0 * * 1-5 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=mono;CI_SCHEDULE_SERVER_VERSION=2.2 3.11 dse-5.1 dse-6.7;CI_SCHEDULE_OS_VERSION=ubuntu/bionic64/csharp-driver
+      H 0 * * 1-5 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=netcoreapp2.0;CI_SCHEDULE_SERVER_VERSION=2.2 3.11 dse-5.1 dse-6.7;CI_SCHEDULE_OS_VERSION=ubuntu/bionic64/csharp-driver
+      H 1 * * 1-5 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=netcoreapp2.1;CI_SCHEDULE_SERVER_VERSION=ALL;CI_SCHEDULE_OS_VERSION=ubuntu/bionic64/csharp-driver
       ##
       # Building on Windows
       #   - Do not build using mono
@@ -426,10 +426,10 @@ pipeline {
       #   - Target Apache Cassandara® v2.1.x, v2.2.x, v3.11.x and DataStax Enterprise v5.1.x, v6.7.x, v6.8.x for net452
       #   - Target Apache Cassandara® v2.2.x, v3.11.x and DataStax Enterprise v6.7.x for net461
       ##
-#      H 2 * * 1-5 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=netcoreapp2.0;CI_SCHEDULE_SERVER_VERSION='3.11 dse-6.7';CI_SCHEDULE_OS_VERSION='win/cs'
-#      H 2 * * 1-5 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=netcoreapp2.1;CI_SCHEDULE_SERVER_VERSION='3.11 dse-6.7';CI_SCHEDULE_OS_VERSION='win/cs'
-#      H 2 * * 1-5 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=net452;CI_SCHEDULE_SERVER_VERSION='2.1 2.2 3.11 dse-5.1 dse-6.7 dse-6.8';CI_SCHEDULE_OS_VERSION='win/cs'
-#      H 2 * * 1-5 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=net461;CI_SCHEDULE_SERVER_VERSION='2.2 3.11 dse-6.7';CI_SCHEDULE_OS_VERSION='win/cs'
+#      H 2 * * 1-5 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=netcoreapp2.0;CI_SCHEDULE_SERVER_VERSION=3.11 dse-6.7;CI_SCHEDULE_OS_VERSION=win/cs
+#      H 2 * * 1-5 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=netcoreapp2.1;CI_SCHEDULE_SERVER_VERSION=3.11 dse-6.7;CI_SCHEDULE_OS_VERSION=win/cs
+#      H 2 * * 1-5 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=net452;CI_SCHEDULE_SERVER_VERSION=2.1 2.2 3.11 dse-5.1 dse-6.7 dse-6.8;CI_SCHEDULE_OS_VERSION=win/cs
+#      H 2 * * 1-5 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=net461;CI_SCHEDULE_SERVER_VERSION=2.2 3.11 dse-6.7;CI_SCHEDULE_OS_VERSION=win/cs
 
       # Every Saturday around 4:00 and 8:00 AM
       ##
@@ -437,19 +437,19 @@ pipeline {
       #   - Do not build using net452 and net461
       #   - Target all Apache Cassandara® and DataStax Enterprise versions for mono, netcoreapp2.0, and netcoreapp2.1
       ##
-      H 4 * * 6 %CI_SCHEDULE=WEEKENDS;CI_SCHEDULE_DOTNET_VERSION=mono;CI_SCHEDULE_SERVER_VERSION=ALL;CI_SCHEDULE_OS_VERSION='ubuntu/bionic64/csharp-driver'
-      H 4 * * 6 %CI_SCHEDULE=WEEKENDS;CI_SCHEDULE_DOTNET_VERSION=netcoreapp2.0;CI_SCHEDULE_SERVER_VERSION=ALL;CI_SCHEDULE_OS_VERSION='ubuntu/bionic64/csharp-driver'
-      H 4 * * 6 %CI_SCHEDULE=WEEKENDS;CI_SCHEDULE_DOTNET_VERSION=netcoreapp2.1;CI_SCHEDULE_SERVER_VERSION=ALL;CI_SCHEDULE_OS_VERSION='ubuntu/bionic64/csharp-driver'
+      H 4 * * 6 %CI_SCHEDULE=WEEKENDS;CI_SCHEDULE_DOTNET_VERSION=mono;CI_SCHEDULE_SERVER_VERSION=ALL;CI_SCHEDULE_OS_VERSION=ubuntu/bionic64/csharp-driver
+      H 4 * * 6 %CI_SCHEDULE=WEEKENDS;CI_SCHEDULE_DOTNET_VERSION=netcoreapp2.0;CI_SCHEDULE_SERVER_VERSION=ALL;CI_SCHEDULE_OS_VERSION=ubuntu/bionic64/csharp-driver
+      H 4 * * 6 %CI_SCHEDULE=WEEKENDS;CI_SCHEDULE_DOTNET_VERSION=netcoreapp2.1;CI_SCHEDULE_SERVER_VERSION=ALL;CI_SCHEDULE_OS_VERSION=ubuntu/bionic64/csharp-driver
       # Building on Windows
       #   - Do not build using mono
       #   - Target Apache Cassandara® v3.11.x and DataStax Enterprise v6.7.x for netcoreapp2.0 an netcoreapp2.1
       #   - Target all Apache Cassandara® and DataStax Enterprise versions for net452
       #   - Target Apache Cassandara® v2.2.x, v3.11.x and DataStax Enterprise v6.7.x for net461
       ##
-#      H 8 * * 6 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=netcoreapp2.0;CI_SCHEDULE_SERVER_VERSION='3.11 dse-6.7';CI_SCHEDULE_OS_VERSION='win/cs'
-#      H 8 * * 6 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=netcoreapp2.1;CI_SCHEDULE_SERVER_VERSION='3.11 dse-6.7';CI_SCHEDULE_OS_VERSION='win/cs'
-#      H 8 * * 6 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=net452;CI_SCHEDULE_SERVER_VERSION=ALL;CI_SCHEDULE_OS_VERSION='win/cs'
-#      H 8 * * 6 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=net461;CI_SCHEDULE_SERVER_VERSION='2.2 3.11 dse-6.7';CI_SCHEDULE_OS_VERSION='win/cs'
+#      H 8 * * 6 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=netcoreapp2.0;CI_SCHEDULE_SERVER_VERSION=3.11 dse-6.7;CI_SCHEDULE_OS_VERSION=win/cs
+#      H 8 * * 6 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=netcoreapp2.1;CI_SCHEDULE_SERVER_VERSION=3.11 dse-6.7;CI_SCHEDULE_OS_VERSION=win/cs
+#      H 8 * * 6 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=net452;CI_SCHEDULE_SERVER_VERSION=ALL;CI_SCHEDULE_OS_VERSION=win/cs
+#      H 8 * * 6 %CI_SCHEDULE=WEEKNIGHTS;CI_SCHEDULE_DOTNET_VERSION=net461;CI_SCHEDULE_SERVER_VERSION=2.2 3.11 dse-6.7;CI_SCHEDULE_OS_VERSION=win/cs
     """)
   }
 
